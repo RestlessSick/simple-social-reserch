@@ -11,8 +11,10 @@ def main():
     try:
         from django.core.management import execute_from_command_line
         from django.core.management.utils import get_random_secret_key
+        file = open('socres\\server\\env\\keys.json', 'w+')
+        print(json.dumps({'SECRET_KEY': get_random_secret_key()}), file=file)
+        file.close()
         
-        get_random_secret_key()
     except ImportError as exc:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "
