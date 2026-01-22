@@ -1,0 +1,114 @@
+{% extends "components/head.html" %}
+
+
+
+{% block body %}
+
+<body>
+    {% include 'components/header.html' %}
+    {% load static %}
+    {% load get_fields get_radio_choices from polls_tags %}
+
+    <div class="container-sm !align-items-center !spacing">
+        <div class="row align-items-center justify-content-between flex-nowrap">
+            <div class="col-auto">
+                <h1 class="text-md-center lh-base font-normal text-uppercase text-decoration-none text-reset mt-0">
+                    {{ poll.theme }}
+                </h1>
+            </div>
+            <div class="col-auto ">
+                <a class="d-flex btn btn-light btn-sm" href="{% url 'polls:qr' poll.id %}" download="qr.png">QR-code</a>
+            </div>
+        </div>
+        <div class="border-bottom  border-dark !round">
+            <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
+
+                <p class="lead">
+                    {{ poll.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+    <form class="container-md align-items-center mt-2" id='poll' method="post">
+        {% csrf_token %}
+        
+        {% for question in questions %}
+        
+        <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|} mt-4">
+            {% get_fields question as fields %}
+            <div class="col  ">
+                
+
+                <p class="text-lg-left lh-base font-weight-normal text-none text-decoration-none text-reset lead">
+                    {{ question.position }}.{{question.question}}
+                </p>
+
+                {% if question.field_type == 'RadioField' %}
+                    {% include "components\\radio-question.html" %}
+
+                {% elif question.field_type == 'TextField' %}
+
+                {% include "components\\text-field.html" %}
+
+                {% elif question.field_type == 'TextArea' %}
+                
+                {% include "components\\text-area.html" %}
+
+                {% elif question.field_type == 'NumberField' %}
+                
+                {% include "components\\number-field.html" %}
+
+                {% endif %}
+
+                
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+        
+        <input class="btn btn-primary btn-md mt-5" type='submit'>
+    </form>
+</body>
+
+<script>
+
+    document.getElementById('poll').addEventListener('submit', (event) => {
+        event.preventDefault();
+        
+        let form = new FormData(document.getElementById('poll'));
+        dict = {};
+        for (let [key, value] of form.entries()) {
+            if (key != 'csrfmiddlewaretoken')
+                dict[key] = value;
+        }
+        
+        fetch(document.querySelector('form').action, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dict),
+        }).then(async response => {
+            if (!response.ok) {
+                await message('Не удалось записать ответы. Возможно вы уже отвечали на этот опрос.');
+                console.error('Ошибка записи ответов.');
+                await sleep(1000);
+            }
+            else {
+                await message('Ответ записан. Сейчас вас перенаправим.');
+                await sleep(1000);
+                window.location.href = '{% url "main:index" %}';
+            }
+        });
+    });
+
+</script>
+
+{% endblock body %}

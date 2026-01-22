@@ -1,0 +1,78 @@
+{% load static %}
+
+<header class="container-fluid mt-2 bg-white">
+    <div class="border-bottom border-primary  ">
+        <nav class="nav justify-content-between  ">
+            <div class="col-sm-auto">
+                <img title="Go to home" src="{% static 'main/images/logo.svg' %}" class="img-fluid rounded-top" role="button" alt="logo" width="30" height="30" onclick="window.location.href = `{% url 'main:index' %}`">
+            </div>
+            <div class="d-flex col-md-auto">
+                <div class="col-sm-auto">
+                    <a class="nav-link active" href="{% url 'polls:poll' %}" aria-current="page">Create poll</a>
+                </div>
+                <div class="col-sm-auto">
+                    <a class="nav-link" href="{% url 'main:about' %}">About</a>
+                </div>
+                {% comment %} <div class="col-sm-auto">
+                    <a class="nav-link disabled" href="#">Disabled link</a>
+                </div> {% endcomment %}
+            </div>
+            <div class="col-auto">
+                <div class="row">
+                    <div class="col-auto ">
+                        <button class="btn btn-default btn-sm " role="button" id="register-button">Register</button>
+                        <div class="position-absolute rounded-4 mt-4 container-fluid !direction !spacing shadow-sm p-2 form-container hidden" id="register-form-container">
+
+                        </div>
+                    </div>
+                    
+                    <div class="col-auto">
+                        <button class="btn btn-primary btn-sm " role="button" id="login-button">Login</button>
+                        <div class="position-absolute rounded-4 mt-4 container-fluid !direction !spacing shadow-sm p-2 form-container hidden" id="login-form-container">
+                                
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <img role="button" title='To profile' src={% static 'main/images/profile.svg' %} width="30" height="30" id="profile" class="hidden" onclick="window.location.href = `{% url 'main:profile' %}`">
+                    </div>
+                </div>
+                
+                
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<script>
+
+    document.getElementById('register-button').addEventListener('click', async (event) => {
+        event.preventDefault();
+        drop_form_by_url('{% url "auth:register" %}', 'register-form-container');
+    });
+
+    document.getElementById('login-button').addEventListener('click', async (event) => {
+        event.preventDefault();
+        drop_form_by_url('{% url "auth:login" %}', 'login-form-container');
+    });
+
+    const drop_form_by_url = async (url, container_id) => {
+        let container = document.getElementById(container_id);
+        if (container.classList.contains('hidden')) {
+            if (container.innerHTML.trim() == '') {
+                let element = await fetch_element_by_url(url);
+                element.querySelectorAll('input').forEach(element => {
+                    element.classList.add('form-control');
+                });
+                await append_element(container.id, element);
+            }
+            container.classList.toggle('hidden');
+        }
+        else {
+            container.classList.toggle('hidden');
+        }
+    };
+
+
+</script>

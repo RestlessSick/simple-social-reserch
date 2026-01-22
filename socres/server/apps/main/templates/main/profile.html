@@ -1,0 +1,48 @@
+{% extends "components/head.html" %}
+
+{% block body %}
+
+<body class="p-3 vh-100">
+
+    {% include "components/header.html" %}
+    <main class="min-vh-100 row p-5 justify-content-evenly">
+
+        <div class="col-auto bg-light shadow-sm rounded-2" style="height: fit-content;">
+            <h2 class="text-md-left lh-base font-normal text-none text-decoration-none text-reset border-bottom border-primary mb-3 text-primary">
+            User-info
+            </h2>
+            <div class="col">
+                <p class="lead text-info mb-1"> Username:  <small class="text-dark">{{ user.user.username }}</small></p>
+                <p class="lead text-info mb-1"> Phone number:  <small class="text-dark">{{ user.phone_number }}</small></p>
+                <p class="lead text-info mb-1"> Here since:  <small class="text-dark">{{ user.user.date_joined|date }}</small></p>
+                <p class="lead text-info mb-1"> Solved questions:  <small class="text-dark">{{ answers.count }}</small></p>
+            </div>
+        </div>
+        <div class="col-auto bg-light shadow-sm rounded-2">
+            <h2 class="text-md-left lh-base font-normal text-none text-decoration-none text-reset border-bottom border-primary mb-3 text-primary">
+                Solved problems of univerce
+            </h2>
+
+            {% for answer in answers %}
+
+            <div class="col border-black border-bottom">
+                <p class="lead text-info m-1">
+                    Poll: <small class="text-black">{{ answer.poll.id }}</small>
+                </p>
+                <p class="lead text-info m-1">
+                    Field: <small class="text-black">{{ answer.field.id }}</small>
+                </p>
+                <p class="lead text-info m-1">
+                    Answer: <small class="text-black">{{ answer.answer }}</small>
+                </p>
+            </div>
+
+            {% endfor %}
+        </div>
+
+
+    </main>
+    {% include "components/footer.html" %}
+</body>
+
+{% endblock body %}

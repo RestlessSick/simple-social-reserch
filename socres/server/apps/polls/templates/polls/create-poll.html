@@ -1,0 +1,79 @@
+{% extends 'components/head.html' %}
+
+
+
+{% block body %}
+{% include 'components/header.html' %}
+<body>
+    <div class="container-sm !direction !spacing">
+        <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|} p-2">
+
+            <form id="create-form" method="post" class="container-sm !direction !spacing mt-2" action="{% url 'polls:poll' %}">
+
+                <div class="row mb-3">
+                    <label for="poll-theme" class="form-label">Poll Theme</label>
+                    <input type="text" class="form-control" id="poll-theme" name="poll-theme" placeholder="Theme" required>
+                </div>
+                
+                
+                <div class="row mb-3">
+                    <label for="poll-descr" class="form-label" required>Poll Describtion</label>
+                    <textarea id="poll-descr" name="poll-descr" class="form-control" placeholder="Description"></textarea>
+                </div>
+
+
+
+                <div class="row-cols-auto" id="questions-container">
+                </div>
+
+
+        
+                <button class="btn btn-secondary btn-sm mb-5" id="add-question-btn">⊕ Add Question</button>
+
+
+
+                <div class="row justify-content-around">
+                    <div class="col-auto">
+                        <input type="submit" class="btn btn-primary btn-sm">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+
+
+{% load static %}
+<script src="{% static 'polls\\js\\poll-creation.js' %}"></script>
+<script>
+
+    document.getElementById('add-question-btn').addEventListener('click', (event) => {
+        event.preventDefault();
+        
+		let container = document.getElementById('questions-container');
+		
+		fetch('/polls/form-gen/question-' + (!container.querySelector('.question') ? '1': parseInt(container.querySelectorAll('.question')[container.querySelectorAll('.question').length - 1].id) + 1), {
+			method: 'get',
+		}).then((response) => {
+			if (!response.ok) {
+				console.log('Не удалось загрузить форму.');
+			}
+			else
+				response.text().then(async (html) => {
+					let element = document.createElement('div');
+					
+					element.innerHTML = html;
+					
+					container.appendChild(element);
+					await search_for_scripts(element);
+				
+			});
+		});        
+        
+    });
+</script>
+
+{% endblock %}
+
+

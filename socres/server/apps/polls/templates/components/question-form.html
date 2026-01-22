@@ -1,0 +1,115 @@
+<div class="row mb-5 question" id="{{ id }}">
+
+    <div class="border-top border-dark  ">
+        <h3 class="text-sm-left lh-base font-normal text-none text-decoration-none text-reset question-{{ id }}">
+            Question {{ id }}
+        </h3>
+    </div>
+
+    <label class="form-label" for="question-{{ id }}-question">Question's question</label>
+    <input class="form-control mb-3" type="text" id="question-{{ id }}-question" name="question-{{ id }}-question" placeholder="type here..." required>
+    
+    <label class="form-label" for="question-{{ id }}-field_type">Field Type</label>
+
+    <select class="form-select" id="question-{{ id }}-field_type" name="question-{{ id }}-field_type" required>
+        <option value="None" hidden disabled selected>...</option>
+        <option value="TextField">Text field</option>
+        <option value="RadioField">Radio field</option>
+        <option value="TextArea">Big text field</option>
+        <option value="NumberField">Numeric field</option>
+    </select>
+
+    <div class="row mx-0">
+
+        <div class="col-lg mt-2 mb-3" id='field-container-{{ id }}'>
+
+        </div>
+
+        <div class="col-lg mt-2 mb-3 hidden" id='choice-container-{{ id }}'>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col  ">
+            <button class="btn btn-secondary btn-sm" id="question-{{ id }}-add_field">Add field</button>
+        </div>
+        <div class="col-auto justify-content-end">
+            <button class="btn btn-secondary btn-sm hidden" id="question-{{ id }}-add_radio_choice">Add Choice</button>
+        </div>
+    </div>
+    <script>
+        
+        document.getElementById('question-{{ id }}-field_type').addEventListener('change', (event) => {
+            event.preventDefault();
+            document.getElementById('field-container-{{ id }}').innerHTML = '';
+            if (document.getElementById('question-{{ id }}-field_type').value == 'RadioField') {
+                document.getElementById('question-{{ id }}-add_radio_choice').classList.remove('hidden');
+                document.getElementById('choice-container-{{ id }}').classList.remove('hidden');
+            }
+            else {
+                document.getElementById('question-{{ id }}-add_radio_choice').classList.add('hidden');
+                document.getElementById('choice-container-{{ id }}').classList.add('hidden');
+            }
+            
+        });
+
+        document.getElementById('question-{{ id }}-add_field').addEventListener('click', (event) => {
+            event.preventDefault();
+            
+            let container = document.getElementById('field-container-{{ id }}');
+            if (document.getElementById('question-{{ id }}-field_type').value != 'None')
+            {
+                fetch('/polls/form-gen/question-{{ id }}-' + document.getElementById('question-{{ id }}-field_type').value +
+                    '-' + (!container.querySelector('.field') ?
+                    '1': parseInt(container.querySelectorAll('.field')[container.querySelectorAll('.field').length - 1].id.split('-')[1]) + 1),
+                {method: 'get'}
+                ).then((response) => {
+                    if (!response.ok) {
+                        console.log('Ошика при получении формы.');
+                    }
+                    else {
+                        response.text().then(async (html) => {
+                            let element = document.createElement('div');
+					
+                            element.innerHTML = html;
+                            console.log(element);
+                            container.appendChild(element);
+                            await search_for_scripts(element);
+                        });
+                    }
+                });
+            }
+        });
+
+
+        document.getElementById('question-{{ id }}-add_radio_choice').addEventListener('click', (event) => {
+            event.preventDefault();
+            
+            let container = document.getElementById('choice-container-{{ id }}');
+
+            
+            fetch('/polls/form-gen/question-{{ id }}-' + 'ChoiceField' +
+                '-' + (!container.querySelector('.choice') ?
+                '1': parseInt(container.querySelectorAll('.choice')[container.querySelectorAll('.choice').length - 1].id.split('-')[1]) + 1),
+            {method: 'get'}
+            ).then((response) => {
+                if (!response.ok) {
+                    console.log('Ошика при получении формы.');
+                }
+                else {
+                    response.text().then(async (html) => {
+                        let element = document.createElement('div');
+                
+                        element.innerHTML = html;
+                        container.appendChild(element);
+                        await search_for_scripts(element);
+                    });
+                }
+            });
+            
+        });
+        
+    </script>
+</div>

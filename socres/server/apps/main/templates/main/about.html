@@ -1,0 +1,39 @@
+{% extends "components/head.html" %}
+
+{% block body %}
+
+{% load static %}
+
+<body class="p-3 vh-100">
+
+    {% include "components/header.html" %}
+    <main class="min-vh-100 row p-5 justify-content-evenly">
+
+        <div class="container px-4 py-5" id="featured-3">
+            <h2 class="pb-2 border-bottom">SocRes (Social Research)</h2> 
+            <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+                <div class="feature col">
+                    <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-gradient fs-2 mb-3">
+                        <img src={% static 'main/images/logo.svg' %} width="30" height="30">
+                    </div> <h3 class="fs-2 text-body-emphasis">What it is</h3> 
+                    <p>This site is created for creating and sharing the polls for fast and simple social researches.</p>
+                    
+                    </a> </div> <div class="feature col"> <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-gradient fs-2 mb-3"> 
+                        <img src={% static 'polls/images/qr-code.svg' %} width="30" height="30">
+                    </div> <h3 class="fs-2 text-body-emphasis">Sharing?</h3> 
+                    <p>You can share poll with links (URL) or using QR-codes with ecoded URL's. Try it out.</p>
+                </div> 
+                <div class="feature col">
+                    <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-gradient fs-2 mb-3">
+                        <img src={% static 'polls/images/poll.svg' %} width="30" height="30">
+                    </div> <h3 class="fs-2 text-body-emphasis">Simple constructors</h3>
+                    <p>You can create Polls, using our simple constructor. Be patient and final result will be rewarding for you. fs. Go check it out.</p> 
+                    <a href="{% url 'polls:poll' %}" class="icon-link">&#9758; Try creating the poll <svg class="bi" aria-hidden="true"><use xlink:href="#chevron-right"></use></svg> </a> 
+                </div> 
+                </div> 
+            </div>
+    </main>
+    {% include "components/footer.html" %}
+</body>
+
+{% endblock body %}

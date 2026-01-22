@@ -1,0 +1,43 @@
+<form id='login-form' class="container-fluid form" method='post' action={% url 'auth:login' %}>
+    <p class='lead'> Login </p>
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" class="btn btn-primary btn-md">
+</form>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        let form = await new FormData(document.getElementById('login-form'));
+        fetch('{% url "auth:login" %}', {
+            method: 'post',
+            body: form
+        }).then(async response => {
+            if (!response.ok) {
+                message("Ошибка авторизации. Проверьте введённые данные, или подключение к Интернету.");
+            }
+            else {
+                await message('Вы успешно авторизовались!');
+                response.json().then(result => {
+                    fetch('/api-auth/token/obtain/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': "application/json",
+                        },
+                        body: JSON.stringify(result),
+                    }).then(async response => {
+                        if (!response.ok) {
+                            await message('Токен не был получен. Перезагрузите страницу.');
+                        }   
+                        else {
+                            await message('Токен обновился.');
+                            window.location.reload();
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+</script>

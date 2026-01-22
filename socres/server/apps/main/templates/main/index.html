@@ -1,0 +1,30 @@
+
+{% extends "components/head.html" %}
+
+{% block body %}
+
+
+{% load static %}
+
+<body class="p-3 pt-0 min-vh-100">
+    
+    {% include "components/header.html" %}
+
+    <main class="container-fluid min-vh-100" id="main">
+
+        
+
+    </main>
+    
+    {% include 'components/footer.html' %}
+    
+
+</body>
+
+<script>
+
+    fetchPaginatedElement();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% if fields.0 %}
+    <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
+
+    {% for field in fields %}
+
+
+    <div class="col-md ">
+        <div class="input-group input-group-sm flex-nowrap mt-4">
+            <label for='text-field-{{ field.id }}' class="input-group-text" id="addon-wrapping">{{ field.note }}</label>
+            <input type="text" class="form-control" name='text-field-{{ field.id }}' aria-describedby="addon-wrapping" required>
+        </div>
+    </div>
+    
+
+    {% endfor %}
+
+    </div>
+
+{% endif %}

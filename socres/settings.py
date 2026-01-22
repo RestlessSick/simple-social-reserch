@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ObjectDoesNotExist
 import os
 import json
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,15 +24,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'socres', 'server', 'env') + '\\keys.json', 'r+') as file: 
-
-    SECRET_KEY = json.loads(*file)
+try:
+    with open(os.path.join(BASE_DIR, 'socres', 'server', 'env') + '\\keys.json', 'r') as file: 
+        SECRET_KEY = json.loads(*file)["SECRET_KEY"]
+except FileExistsError:
+    print("File exeption!")
+    raise ObjectDoesNotExist
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://localhost",
+]
+
+CSRF_TRUSTED_ORIGINS = ['http://192.168.0.103', 'http://127.0.0.1', 'http://localhost']
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Application definition
 
@@ -41,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'phonenumber_field',
@@ -49,7 +63,32 @@ INSTALLED_APPS = [
     'socres.server.apps.polls.apps.PollsConfig',
 ]
 
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': False,
+
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'SIGNING_KEY': SECRET_KEY,
+    'CHECK_USER_IS_ACTIVE': False,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES' : [
+        'socres.server.apps.jwt_auth.authentication.JWTCookieAuthentication'
+    ],
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,10 +123,18 @@ WSGI_APPLICATION = 'socres.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'socres',
+        'USER': 'db',
+        'PASSWORD': 'password123',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4'
+        },
     }
 }
+
 
 
 # Password validation
@@ -125,6 +172,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_DIR = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'server/apps/main/static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

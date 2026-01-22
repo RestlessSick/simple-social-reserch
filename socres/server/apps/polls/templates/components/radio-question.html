@@ -1,0 +1,44 @@
+{% load get_fields get_radio_choices from polls_tags %}
+
+
+<table class="table">
+
+    {% get_radio_choices question as choices %}
+    <thead>
+        <tr>
+        
+            <th scope='col'>
+                <div class="col  ">
+                    Choice  
+                </div>
+            </th>
+
+            {% for choice in choices %}
+            <th scope='col'>
+                <div class="col  ">
+                    {{choice.text}}
+                </div>
+                
+            {% endfor %}
+            </th>
+        </tr>
+    </thead>
+
+
+    {% for field in fields %}
+    <tr>
+        
+        <td>{{ field.note }}</td>
+
+        {% for choice in choices %}
+        <td>
+            <input type='radio' name='radio-field-{{ field.id }}' value={{ choice.text }} required>
+        </td>
+        {% endfor %}
+
+    </tr>
+
+    {% endfor %}
+
+
+</table>

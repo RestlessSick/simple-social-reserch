@@ -1,0 +1,51 @@
+<div class="row mt-3" id="append_to">
+{% load static %}
+
+{% load polls_tags %}
+
+
+<input type="text" id="next_page" hidden value="{% if page_obj.has_next %}{{page_obj.next_page_number}}{% else %}-1{% endif %}">
+
+{% for poll in object_list %}
+
+<div class="col-md-3 poll mb-3">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row flex-nowrap justify-content-between">
+                <div class="col ">
+                    <h4 class="card-title d-flex text-nowrap">{{ poll.theme }}</h4>
+                </div>
+                <div class="col-auto end-0 justify-content-end">
+                    <a class="d-flex btn btn-sm p-0 justify-content-center m-0" href="{% url 'polls:qr' poll.id %}" download="qr.png"><image class="m-0" src="{% static 'polls/images/qr-pod.svg' %}" width="30" height="30"></a>
+                </div>
+            </div>
+            
+            {% get_poll_questions poll as questions %}
+            <p class="card-text mb-1">{{ poll.description }}</p>
+            <p class="card-text text-secondary mt-0">Poll questions: {{ questions.count }}</p>
+            <div class="row">
+                <div class="col  align-items-center">
+                    <a class="d-flex btn btn-primary btn-sm align-items-center justify-content-center" href="{% url 'polls:single-poll' poll.id %}" target="_blank">Pass poll</a>
+                </div>
+                <div class="col  justify-content-around">
+                    <div class="row">
+                        <div class="col">
+                            <a class="d-flex btn btn-light btn-sm align-items-center justify-content-center" onclick="copy_url(`{% url 'polls:url' poll.id %}`)">URL</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endfor %}
+
+</div>
+
+<a class="btn btn-primary" id="more-polls" style="font-size: 12pt" onclick='fetchPaginatedElement("{% if page_obj.has_next %}{{page_obj.next_page_number}}{% else %}-1{% endif %}", "append_to", ".poll", "more-polls");'>more</a>
+

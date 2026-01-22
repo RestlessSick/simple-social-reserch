@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+    <head>
+        <link rel="icon" type="image/x-icon" href="{% static 'main/images/logo.svg' %}">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'main/css/main.css' %}">
+        <script src="{% static 'main/js/token-refresh.js' %}"></script>
+        <script src="{% static 'main/js/onload.js' %}"></script>
+        <script src="{% static 'polls/js/onload-form-save.js' %}"></script>
+        <script src="{% static 'polls/js/search-for-scripts.js' %}"></script>
+        <script src="{% static 'main/js/fetch-element.js' %}"></script>
+        <script src="{% static 'main/js/show-hint.js' %}"></script>
+        <script src="{% static 'polls/js/copy-url.js' %}"></script>
+        <title>Social Reserch</title>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+
+        <link href="{% static 'main/css/bootstrap.css' %}" rel="stylesheet">
+        <script src="{% static 'main/js/bootstrap.bundle.js' %}"></script>
+    </head>
+    {% include 'components/loading-placeholder.html' %}
+    {% include 'components/floating-hint.html' %}
+    {% block body %}{% endblock %}
+
+
+</html>

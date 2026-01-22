@@ -1,0 +1,10 @@
+<div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
+    {% for field in fields %}
+    <div class="col-md  mt-2">
+        <div class="input-group flex-nowrap">
+            <label for='number-field-{{ field.id }}' class="input-group-text" id="addon-wrapping">{{ field.note }}</label>
+            <input type="number" name="number-field-{{ field.id }}" class="form-control" required>
+        </div>
+    </div>
+    {% endfor %}
+</div>
