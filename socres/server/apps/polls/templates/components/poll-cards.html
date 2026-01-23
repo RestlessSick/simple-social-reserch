@@ -8,12 +8,12 @@
 
 {% for poll in object_list %}
 
-<div class="col-md-3 poll mb-3">
+<div class="col-xl-3 poll mb-3">
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="row flex-nowrap justify-content-between">
                 <div class="col ">
-                    <h4 class="card-title d-flex text-nowrap">{{ poll.theme }}</h4>
+                    <h4 class="card-title d-flex text-break">{{ poll.theme }}</h4>
                 </div>
                 <div class="col-auto end-0 justify-content-end">
                     <a class="d-flex btn btn-sm p-0 justify-content-center m-0" href="{% url 'polls:qr' poll.id %}" download="qr.png"><image class="m-0" src="{% static 'polls/images/qr-pod.svg' %}" width="30" height="30"></a>

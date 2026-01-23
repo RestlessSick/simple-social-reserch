@@ -3,6 +3,7 @@
     --secondary-color: #5D5DFF;
     --light-gray: #F7F7F7;
     --dark-gray: #E5E5E5;
+    
 }
 
 
@@ -130,6 +131,23 @@
 
 
 /* Контейнеры и формы */
+
+#mobile-nav {
+    display: none;
+}
+
+#dropdown.hidden {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    #fullscreen-nav {
+        display: none;
+    }
+    #mobile-nav {
+        display: block;
+    }
+}
 
 @keyframes small-fade-out {
     from {

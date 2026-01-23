@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
+from ....settings import STATIC_ROOT
+import os
 
 
 # Create your views here.
@@ -8,6 +10,7 @@ from ..jwt_auth.functions import *
 from ..polls.models import *
 class IndexView(generic.TemplateView):
     template_name='main/index.html'
+
 
 
 class ProfileView(generic.TemplateView):

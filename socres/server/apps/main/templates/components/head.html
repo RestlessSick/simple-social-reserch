@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'main/css/main.css' %}">
         <script src="{% static 'main/js/token-refresh.js' %}"></script>
         <script src="{% static 'main/js/onload.js' %}"></script>
-        <script src="{% static 'polls/js/onload-form-save.js' %}"></script>
+        {% if polls %}<script src="{% static 'polls/js/onload-form-save.js' %}"></script>{% endif %}
         <script src="{% static 'polls/js/search-for-scripts.js' %}"></script>
         <script src="{% static 'main/js/fetch-element.js' %}"></script>
         <script src="{% static 'main/js/show-hint.js' %}"></script>

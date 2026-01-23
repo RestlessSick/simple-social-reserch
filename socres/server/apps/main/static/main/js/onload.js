@@ -3,7 +3,7 @@ let sleep = async (ms) => {
 }
 
 let get_cookie = async (name) => {
-    let cookies = cookieStore.get('csrftoken');
+    let cookies = cookieStore.get(name);
     cookies.then((value) => console.log(value));
 
     return 0;

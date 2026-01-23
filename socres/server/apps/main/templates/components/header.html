@@ -1,12 +1,12 @@
 {% load static %}
 
 <header class="container-fluid mt-2 bg-white">
-    <div class="border-bottom border-primary  ">
+    <div class="border-bottom border-primary " id='fullscreen-nav'>
         <nav class="nav justify-content-between  ">
             <div class="col-sm-auto">
                 <img title="Go to home" src="{% static 'main/images/logo.svg' %}" class="img-fluid rounded-top" role="button" alt="logo" width="30" height="30" onclick="window.location.href = `{% url 'main:index' %}`">
             </div>
-            <div class="d-flex col-md-auto">
+            <div class="d-flex col-auto">
                 <div class="col-sm-auto">
                     <a class="nav-link active" href="{% url 'polls:poll' %}" aria-current="page">Create poll</a>
                 </div>
@@ -17,7 +17,7 @@
                     <a class="nav-link disabled" href="#">Disabled link</a>
                 </div> {% endcomment %}
             </div>
-            <div class="col-auto">
+            <div class="col-auto align-items-center">
                 <div class="row">
                     <div class="col-auto ">
                         <button class="btn btn-default btn-sm " role="button" id="register-button">Register</button>
@@ -42,6 +42,59 @@
             </div>
         </nav>
     </div>
+
+
+
+    <div class="border-bottom border-primary " id='mobile-nav'>
+        <nav class="nav justify-content-between  ">
+            <div class="col-sm-auto">
+                <img title="Go to home" src="{% static 'main/images/logo.svg' %}" class="img-fluid rounded-top" role="button" alt="logo" width="30" height="30" onclick="window.location.href = `{% url 'main:index' %}`">
+            </div>
+            
+            <div class="col-sm-auto">
+                <img src="{% static 'main/images/logo.svg' %}" alt="">
+            </div>
+
+            <div class="position-absolute hidden" id="dropdown">
+                <div class="col-sm-auto">
+                    <a class="nav-link active" href="{% url 'polls:poll' %}" aria-current="page">Create poll</a>
+                </div>
+                <div class="col-sm-auto">
+                    <a class="nav-link" href="{% url 'main:about' %}">About</a>
+                </div>
+                {% comment %} <div class="col-sm-auto">
+                    <a class="nav-link disabled" href="#">Disabled link</a>
+                </div> {% endcomment %}
+            </div>
+
+            <div class="col-auto align-items-center">
+                <div class="row">
+                    <div class="col-auto ">
+                        <button class="btn btn-default btn-sm " role="button" id="register-button-mobile">Register</button>
+                        <div class="position-absolute rounded-4 mt-4 container-fluid !direction !spacing shadow-sm p-2 form-container hidden" id="register-form-container-mobile">
+
+                        </div>
+                    </div>
+                    
+                    <div class="col-auto">
+                        <button class="btn btn-primary btn-sm " role="button" id="login-button-mobile">Login</button>
+                        <div class="position-absolute rounded-4 mt-4 container-fluid !direction !spacing shadow-sm p-2 form-container hidden" id="login-form-container-mobile">
+                                
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <img src="{% static 'main/images/menu.svg' %}" alt="menu" width="30" height="30">
+                    </div>
+                    <div class="col-auto">
+                        <img role="button" title='To profile' src={% static 'main/images/profile.svg' %} width="30" height="30" id="profile" class="hidden" onclick="window.location.href = `{% url 'main:profile' %}`">
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+        </nav>
+    </div>
 </header>
 
 
@@ -55,6 +108,16 @@
     document.getElementById('login-button').addEventListener('click', async (event) => {
         event.preventDefault();
         drop_form_by_url('{% url "auth:login" %}', 'login-form-container');
+    });
+
+    document.getElementById('register-button-mobile').addEventListener('click', async (event) => {
+        event.preventDefault();
+        drop_form_by_url('{% url "auth:register" %}', 'register-form-container-mobile');
+    });
+
+    document.getElementById('login-button-mobile').addEventListener('click', async (event) => {
+        event.preventDefault();
+        drop_form_by_url('{% url "auth:login" %}', 'login-form-container-mobile');
     });
 
     const drop_form_by_url = async (url, container_id) => {
